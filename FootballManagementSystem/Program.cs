@@ -17,8 +17,7 @@ builder.Services.AddDbContext<FootballContext>(options =>
 
 builder.Services.AddScoped<IClubService, ClubService>();
 builder.Services.AddScoped<PlayerService>();
-builder.Services.AddScoped<MatchService>();
-builder.Services.AddScoped<StatisticsService>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
