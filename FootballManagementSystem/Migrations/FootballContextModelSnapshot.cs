@@ -164,13 +164,13 @@ namespace FootballManagementSystem.Migrations
                     b.HasOne("FootballManagementSystem.Models.Club", "AwayClub")
                         .WithMany()
                         .HasForeignKey("AwayClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("FootballManagementSystem.Models.Club", "HomeClub")
                         .WithMany()
                         .HasForeignKey("HomeClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AwayClub");

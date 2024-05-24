@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FootballManagementSystem.Services;
 
-public class ClubService
+public class ClubService : IClubService
 {
     private readonly FootballContext _context;
 
@@ -17,7 +17,6 @@ public class ClubService
         return await _context.Clubs.ToListAsync();
     }
 
-   
     public async Task<Club> GetClubById(int id)
     {
         return await _context.Clubs
@@ -28,6 +27,7 @@ public class ClubService
     {
         return await _context.Clubs.ToListAsync();
     }
+
     public async Task<Club> CreateClub(Club club)
     {
         _context.Clubs.Add(club);
@@ -62,7 +62,7 @@ public class ClubService
         await _context.SaveChangesAsync();
         return true;
     }
-    
+
     public async Task<IEnumerable<Player>> GetPlayersOfClub(int clubId)
     {
         return await _context.Players

@@ -14,7 +14,8 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<FootballContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<ClubService>();
+
+builder.Services.AddScoped<IClubService, ClubService>();
 builder.Services.AddScoped<PlayerService>();
 builder.Services.AddScoped<MatchService>();
 builder.Services.AddScoped<StatisticsService>();
