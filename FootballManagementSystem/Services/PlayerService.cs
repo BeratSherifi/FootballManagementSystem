@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FootballManagementSystem.Services;
 
-public class PlayerService
+public class PlayerService : IPlayerService
 {
     private readonly FootballContext _context;
 
@@ -37,7 +37,6 @@ public class PlayerService
         await _context.SaveChangesAsync();
         return existingPlayer;
     }
-
 
     public async Task<Player> GetPlayerById(int id)
     {
@@ -79,4 +78,3 @@ public class PlayerService
         return true;
     }
 }
-

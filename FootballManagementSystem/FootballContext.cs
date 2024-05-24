@@ -14,8 +14,8 @@ public class FootballContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Configure the relationships and other settings
-
- 
+        modelBuilder.Entity<Club>()
+            .HasIndex(c => c.Name)
+            .IsUnique();
     }
 }

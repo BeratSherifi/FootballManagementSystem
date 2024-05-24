@@ -2,7 +2,9 @@ using FootballManagementSystem.Dto;
 using FootballManagementSystem.Models;
 using FootballManagementSystem.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace FootballManagementSystem.Controllers
 {
@@ -20,19 +22,40 @@ namespace FootballManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<Club>> CreateClub(CreateClubDto clubDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var club = new Club
             {
                 Name = clubDto.Name,
                 Stadium = clubDto.Stadium
             };
 
-            var createdClub = await _clubService.CreateClub(club);
-            return CreatedAtAction(nameof(GetClubById), new { id = createdClub.Id }, createdClub);
+            try
+            {
+                var createdClub = await _clubService.CreateClub(club);
+                return CreatedAtAction(nameof(GetClubById), new { id = createdClub.Id }, createdClub);
+            }
+            catch (DuplicateNameException)
+            {
+                return Conflict("Duplicate club");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateClub(int id, UpdateClubDto clubDto)
+        public async Task<IActionResult> UpdateClub(int id, CreateClubDto clubDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var club = new Club
             {
                 Id = id,
@@ -61,7 +84,6 @@ namespace FootballManagementSystem.Controllers
 
             return Ok(club);
         }
-
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Club>>> GetAllClubs()

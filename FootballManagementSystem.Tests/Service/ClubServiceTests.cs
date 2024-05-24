@@ -1,10 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FootballManagementSystem;
 using FootballManagementSystem.Models;
 using FootballManagementSystem.Services;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using FootballManagementSystem;
 using Xunit;
 
 public class ClubServiceTests
@@ -12,7 +14,7 @@ public class ClubServiceTests
     private DbContextOptions<FootballContext> CreateNewContextOptions()
     {
         return new DbContextOptionsBuilder<FootballContext>()
-            .UseInMemoryDatabase(databaseName: $"FootballTestDb_{System.Guid.NewGuid()}")
+            .UseInMemoryDatabase(databaseName: $"FootballTestDb_{Guid.NewGuid()}")
             .Options;
     }
 
@@ -92,6 +94,25 @@ public class ClubServiceTests
         using (var context = new FootballContext(options))
         {
             Assert.Equal(1, await context.Clubs.CountAsync());
+        }
+    }
+
+    [Fact]
+    public async Task CreateClub_ShouldThrowException_WhenAddingDuplicateClub()
+    {
+        var options = CreateNewContextOptions();
+
+        using (var context = new FootballContext(options))
+        {
+            var service = new ClubService(context);
+            var club = new Club { Name = "Duplicate Club", Stadium = "Stadium" };
+
+            await service.CreateClub(club);
+
+            await Assert.ThrowsAsync<DuplicateNameException>(async () =>
+            {
+                await service.CreateClub(club);
+            });
         }
     }
 
